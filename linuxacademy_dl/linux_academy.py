@@ -3,7 +3,7 @@
 #
 # This file is a part of 'linuxacademy-dl' project.
 #
-# Copyright (c) 2016, Vassim Shahir
+# Copyright (c) 2016-2017, Vassim Shahir
 # All rights reserved.
 #
 # Redistribution and use in source and binary forms, with or without

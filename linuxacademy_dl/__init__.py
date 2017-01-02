@@ -3,7 +3,7 @@
 #
 # This file is a part of 'linuxacademy-dl' project.
 #
-# Copyright (c) 2016, Vassim Shahir
+# Copyright (c) 2016-2017, Vassim Shahir
 # All rights reserved.
 #
 # Redistribution and use in source and binary forms, with or without
@@ -37,7 +37,7 @@ __title__ = 'linuxacademy-dl'
 __author__ = 'Vassim Shahir'
 __email__ = 'geek@vassim.in'
 __license__ = 'BSD 3-Clause License'
-__copyright__ = 'Copyright 2016 Vassim Shahir'
+__copyright__ = 'Copyright (c) 2016-2017, Vassim Shahir'
 __version__ = '1.0.dev1'
 
 Version = __version__  # for backward compatibility
