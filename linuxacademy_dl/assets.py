@@ -115,7 +115,7 @@ class Asset(object):
                 url=self.url, title=self.title,
                 video_quality=self.download_params.video_quality
             )
-        return lambda *args, **kwargs: None
+        return lambda *args, **kwargs: []
 
     def get_resources(self):
         processor = self.get_asset_processor()
