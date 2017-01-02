@@ -1,7 +1,7 @@
 Python script to download a linuxacademy.com course, for personal offline use.
 
 ### Version
-**1.0.dev1**
+**1.0.dev2**
 
 
 ### Prerequisites
