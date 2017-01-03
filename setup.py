@@ -6,7 +6,8 @@ setup(
     name=__title__,
     version=__version__,
 
-    description='Download videos from LinuxAcademy for personal offline use',
+    description='Download videos from Linux Academy (linuxacademy.com)'
+                ' for personal offline use',
     long_description=open('README.md').read(),
 
     author=__author__,

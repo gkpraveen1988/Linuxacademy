@@ -57,12 +57,13 @@ class CLI(object):
 
     def argparser_init(self):
         parser = argparse.ArgumentParser(
-            description='Fetch all the lectures for a LinuxAcademy course',
+            description='Fetch all the lectures for a Linux Academy '
+                        '(linuxacademy.com) course',
             prog=__title__
         )
         parser.add_argument(
             'link',
-            help='Link for LinuxAcademy course',
+            help='Link for Linux Academy course',
             action='store'
         )
         parser.add_argument(

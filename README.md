@@ -1,7 +1,11 @@
-Python script to download a linuxacademy.com course, for personal offline use.
+Python script to download a Linux Academy (linuxacademy.com) course, for personal offline use.
 
 ### Version
 **1.0.dev2**
+
+[![Python Version](https://img.shields.io/pypi/pyversions/linuxacademy-dl.svg)]()
+[![PyPI Version](https://img.shields.io/pypi/v/linuxacademy-dl.svg)](https://pypi.python.org/pypi/linuxacademy-dl)
+[![PyPI Status](https://img.shields.io/pypi/status/linuxacademy-dl.svg)]()
 
 
 ### Prerequisites
@@ -85,10 +89,10 @@ usage: linuxacademy-dl [-h] [-u USERNAME] [-p PASSWORD] [-o OUTPUT]
                        [--use-ffmpeg] [-q {1080,720,480,360}] [--debug] [-v]
                        link
 
-Fetch all the lectures for a LinuxAcademy course
+Fetch all the lectures for a Linux Academy (linuxacademy.com) course
 
 positional arguments:
-  link                  Link for LinuxAcademy course
+  link                  Link for Linux Academy course
 
 optional arguments:
   -h, --help            show this help message and exit
