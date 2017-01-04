@@ -69,7 +69,7 @@ Simply call `linuxacademy-dl` with the full URL to the course page.
 
     python -m linuxacademy_dl https://linuxacademy.com/cp/modules/view/id/course_id
 
-`linuxacademy-dl` will ask for your udemy username (email address) and password then start downloading the videos.
+`linuxacademy-dl` will ask for your username (or email address) and password then start downloading the videos.
 
 By default, `linuxacademy-dl` will download all the course materials directly into the current working directory.  If you wish to have the files downloaded to a specific location, use the `-o /path/to/directory/` parameter.
 
