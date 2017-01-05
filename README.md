@@ -3,9 +3,9 @@ Python script to download a Linux Academy (linuxacademy.com) course, for persona
 ### Version
 **1.0.dev2**
 
-[![Python Version](https://img.shields.io/pypi/pyversions/linuxacademy-dl.svg)]()
+[![Python Version](https://img.shields.io/pypi/pyversions/linuxacademy-dl.svg)](https://pypi.python.org/pypi/linuxacademy-dl)
 [![PyPI Version](https://img.shields.io/pypi/v/linuxacademy-dl.svg)](https://pypi.python.org/pypi/linuxacademy-dl)
-[![PyPI Status](https://img.shields.io/pypi/status/linuxacademy-dl.svg)]()
+[![PyPI Status](https://img.shields.io/pypi/status/linuxacademy-dl.svg)](https://pypi.python.org/pypi/linuxacademy-dl)
 
 
 ### Prerequisites
