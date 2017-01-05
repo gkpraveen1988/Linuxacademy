@@ -1,6 +1,24 @@
 from setuptools import setup
 from linuxacademy_dl import __title__, __version__,\
         __author__, __email__, __license__
+import subprocess
+import tempfile
+
+
+try:
+    with tempfile.NamedTemporaryFile('wb+') as rst_file:
+        subprocess.call(
+            [
+             "pandoc", "README.md", "-f", "markdown", "-t", "rst",
+             "-o", rst_file.name
+            ]
+        )
+        rst_file.seek(0)
+        long_description = rst_file.read()
+except OSError:
+    print 'error'
+    long_description = open('README.md').read()
+
 
 setup(
     name=__title__,
@@ -8,7 +26,7 @@ setup(
 
     description='Download videos from Linux Academy (linuxacademy.com)'
                 ' for personal offline use',
-    long_description=open('README.md').read(),
+    long_description=long_description,
 
     author=__author__,
     author_email=__email__,
