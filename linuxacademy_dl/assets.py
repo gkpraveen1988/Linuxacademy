@@ -51,7 +51,8 @@ except:
     from urlparse import urljoin
 
 logger = logging.getLogger(__title__)
-REGEX_M3U8 = "var wowzaUrl2 = '([a-zA-Z0-9\-\.\_\~\:\/\?\#\[\]\@\!\$\&\(\)\*\+\,\;\=\`]+)';"
+REGEX_M3U8 = "var wowzaUrl2 = " \
+             "'([a-zA-Z0-9\-\.\_\~\:\/\?\#\[\]\@\!\$\&\(\)\*\+\,\;\=\`]+)';"
 
 
 class LessonProcessor(object):
