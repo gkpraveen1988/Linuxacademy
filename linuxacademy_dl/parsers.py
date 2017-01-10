@@ -46,8 +46,7 @@ except:
 class SyllabusParser(HTMLParser, object):
 
     def __init__(self):
-        self.__flag_fetching_module_heading = False
-        self.__flag_fetching_lesson_heading = False
+        self.__flag_write_to_buffer = False
         self.__text_store = StringIO()
         self.total_module_count = 0
 
@@ -80,17 +79,17 @@ class SyllabusParser(HTMLParser, object):
         the_tag = tag.lower()
         if the_tag == "h3" and attributes['class'] == "syllabus-section-title":
             self.__update_parsed_data()
-            self.__flag_fetching_module_heading = True
+            self.__flag_write_to_buffer = True
 
         if the_tag == "a":
-            self.__flag_fetching_lesson_heading = True
+            self.__flag_write_to_buffer = True
             self.__buffer_lesson_data = {'url': attributes['href']}
 
     def handle_endtag(self, tag):
         the_tag = tag.lower()
-        if the_tag == "h3" and self.__flag_fetching_module_heading:
+        if the_tag == "h3" and self.__flag_write_to_buffer:
 
-            self.__flag_fetching_module_heading = False
+            self.__flag_write_to_buffer = False
             self.__buffer = {
                 'title': clean_filename(self.__text_store.getvalue().strip()),
                 'contents': [],
@@ -98,8 +97,8 @@ class SyllabusParser(HTMLParser, object):
             }
             self.__reset_text_store()
 
-        elif the_tag == "a" and self.__flag_fetching_lesson_heading:
-            self.__flag_fetching_lesson_heading = False
+        elif the_tag == "a" and self.__flag_write_to_buffer:
+            self.__flag_write_to_buffer = False
             self.__buffer_lesson_data['title'] = clean_filename(
                 self.__text_store.getvalue().strip()
             )
@@ -109,9 +108,8 @@ class SyllabusParser(HTMLParser, object):
             self.__reset_text_store()
 
     def handle_data(self, data):
-        if self.__flag_fetching_module_heading or \
-                self.__flag_fetching_lesson_heading:
-            self.__text_store.write(unicode(data))
+        if self.__flag_write_to_buffer:
+            self.__text_store.write(data)
 
     def handle_end_of_doc(self):
         self.__update_parsed_data()
