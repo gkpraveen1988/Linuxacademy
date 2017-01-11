@@ -34,23 +34,39 @@
 #
 
 from __future__ import with_statement,  unicode_literals
-from linuxacademy_dl.parsers import SyllabusParser
+from linuxacademy_dl.parsers import SyllabusParser, \
+            PlaylistParser, ChunkListParser
 import os
 import pickle
+import pytest
 
 
 DATA_PATH = os.path.join(os.path.dirname(__file__), 'data')
 
 
-def test_syllabus_parser():
-    with open(os.path.join(DATA_PATH, 'syllabus_response'), 'rb') \
-            as syllabus_response, \
-            open(os.path.join(DATA_PATH, 'syllabus_parsed'), 'rb') \
-            as syllabus_parsed:
+@pytest.mark.parametrize(("ip_file_path", "op_file_path", "parser_obj"), [
+    (
+     os.path.join(DATA_PATH, 'syllabus_response'),
+     os.path.join(DATA_PATH, 'syllabus_parsed'),
+     SyllabusParser()
+    ),
+    (
+     os.path.join(DATA_PATH, 'playlist_m3u8_response'),
+     os.path.join(DATA_PATH, 'playlist_m3u8_parsed'),
+     PlaylistParser()
+    ),
+    (
+     os.path.join(DATA_PATH, 'chunklist_b2000000_m3u8_response'),
+     os.path.join(DATA_PATH, 'chunklist_b2000000_m3u8_parsed'),
+     ChunkListParser()
+    ),
+])
+def test_parser(ip_file_path, op_file_path, parser_obj):
+    with open(ip_file_path, 'rb') as in_data_raw, \
+            open(op_file_path, 'rb') as out_data_pickled:
 
-        sp = SyllabusParser()
-        data = syllabus_response.read().decode('utf-8')
-        sp.feed(data)
-        resp = pickle.load(syllabus_parsed)
+        in_data = in_data_raw.read().decode('utf-8')
+        parser_obj.feed(in_data)
+        out_data = pickle.load(out_data_pickled)
 
-    assert sp.parsed_data == resp
+    assert parser_obj.parsed_data == out_data
