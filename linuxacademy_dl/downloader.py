@@ -35,7 +35,7 @@
 
 from __future__ import unicode_literals, print_function, with_statement
 from . import __title__
-from _session import session
+from ._session import session
 from concurrent.futures import ThreadPoolExecutor
 from requests_futures.sessions import FuturesSession
 
