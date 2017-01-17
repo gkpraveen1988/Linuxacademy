@@ -38,6 +38,6 @@ __author__ = 'Vassim Shahir'
 __email__ = 'geek@vassim.in'
 __license__ = 'BSD 3-Clause License'
 __copyright__ = 'Copyright (c) 2016-2017, Vassim Shahir'
-__version__ = '1.0.dev2'
+__version__ = '1.0a1'
 
 Version = __version__  # for backward compatibility

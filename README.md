@@ -1,7 +1,7 @@
 Python script to download a Linux Academy (linuxacademy.com) course, for personal offline use.
 
 ### Version
-**1.0.dev2**
+**1.0a1**
 
 [![Python Version](https://img.shields.io/pypi/pyversions/linuxacademy-dl.svg)](https://pypi.python.org/pypi/linuxacademy-dl)
 [![PyPI Version](https://img.shields.io/pypi/v/linuxacademy-dl.svg)](https://pypi.python.org/pypi/linuxacademy-dl)
