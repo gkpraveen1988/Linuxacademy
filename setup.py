@@ -45,7 +45,7 @@ setup(
         ]
     },
     classifiers=[
-        u'Development Status :: 2 - Pre-Alpha',
+        u'Development Status :: 3 - Alpha',
         u'Environment :: Console',
         u'Intended Audience :: Developers',
         u'License :: OSI Approved :: BSD License',
