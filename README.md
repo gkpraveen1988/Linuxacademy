@@ -39,7 +39,13 @@ or
 sudo pip install linuxacademy-dl
 ```
 
-Also you need to `sudo` installing `pip` itself or you run into the same problem. 
+Also you need to use `sudo` installing `pip` itself or you run into the same problem.
+
+To install locally, clone and switch in the repository and run `setup.py` with `install` as an argument.
+
+```
+sudo python2.7 setup.py install
+```
 
 
 ### Update

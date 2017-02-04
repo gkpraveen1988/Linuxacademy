@@ -99,6 +99,7 @@ class DownloadEngine(object):
     def ffmpeg_process(self, input_file_name, output_file_name):
         command = [
             'ffmpeg',
+            '-loglevel', 'fatal',
             '-i', input_file_name,
             '-y',
             '-bsf:a', 'aac_adtstoasc',
