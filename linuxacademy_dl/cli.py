@@ -37,6 +37,8 @@ from __future__ import unicode_literals, absolute_import, print_function
 from . import __version__, __title__
 from .linux_academy import LinuxAcademy
 from .exceptions import LinuxAcademyException
+from .utils import sys_info
+from datetime import datetime
 
 import os
 import sys
@@ -50,7 +52,10 @@ logger = logging.getLogger(__title__)
 class CLI(object):
 
     LOG_FORMAT_CONSOLE = '%(levelname)-8s %(message)s'
-    LOG_FORMAT_FILE = '%(asctime)s %(name)-12s %(levelname)-8s %(message)s'
+    LOG_FORMAT_FILE = '%(asctime)s %(levelname)-8s %(message)s'
+    LOG_DIR = os.path.join(
+        os.path.expanduser('~'), 'linuxacademy-dl', 'log'
+    )
 
     def __init__(self):
         self.argparser = self.argparser_init()
@@ -111,14 +116,55 @@ class CLI(object):
         )
         return parser
 
-    def __init_logger(self, error_level=logging.INFO):
+    def get_debug_log_file_name(self):
+        return "log_{}.log".format(
+            datetime.isoformat(datetime.now())
+        )
+
+    def get_log_handler(self, error_level, formatter,
+                        handler, handler_args={}):
+        log_handler = handler(**handler_args)
+        log_handler.setLevel(error_level)
+        log_handler.setFormatter(
+            logging.Formatter(formatter)
+        )
+        return log_handler
+
+    def get_console_log_handler(self, error_level):
+        return self.get_log_handler(
+            error_level, self.LOG_FORMAT_CONSOLE,
+            logging.StreamHandler
+        )
+
+    def get_file_log_handler(self, error_level):
+        return self.get_log_handler(
+            error_level, self.LOG_FORMAT_FILE,
+            logging.FileHandler,
+            {
+             "filename": os.path.join(
+                self.LOG_DIR,
+                self.get_debug_log_file_name()
+                ),
+             "mode": "w+"
+            }
+        )
+
+    def init_logger(self, error_level=logging.INFO):
             logger.setLevel(logging.DEBUG)
-            console_log = logging.StreamHandler()
-            console_log.setLevel(error_level)
-            console_log.setFormatter(
-                logging.Formatter(self.LOG_FORMAT_CONSOLE)
-            )
-            logger.addHandler(console_log)
+            logger.addHandler(self.get_console_log_handler(error_level))
+
+            if error_level == logging.DEBUG:
+                try:
+                    os.makedirs(self.LOG_DIR)
+                except:
+                    pass
+                logger.addHandler(self.get_file_log_handler(error_level))
+
+    def _generate_sys_info_log(self):
+        system_info = sys_info()
+        logger.debug('Python: {}'.format(system_info['python']))
+        logger.debug('Platform: {}'.format(system_info['platform']))
+        logger.debug('OS: {}'.format(system_info['os']))
 
     def main(self):
         args = vars(self.argparser.parse_args())
@@ -126,11 +172,6 @@ class CLI(object):
         username = args['username']
         password = args['password']
         debug = args['debug']
-
-        if debug:
-            self.__init_logger(error_level=logging.DEBUG)
-        else:
-            self.__init_logger()
 
         output_folder = os.path.abspath(
             os.path.expanduser(args['output']) if args['output'] else ''
@@ -141,6 +182,12 @@ class CLI(object):
 
         if not password:
             password = getpass.getpass(prompt='Password : ')
+
+        if debug:
+            self.init_logger(error_level=logging.DEBUG)
+            self._generate_sys_info_log()
+        else:
+            self.init_logger()
 
         try:
             with LinuxAcademy(
