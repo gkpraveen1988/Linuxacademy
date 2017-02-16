@@ -1,30 +1,27 @@
 Python script to download a Linux Academy (linuxacademy.com) course, for personal offline use.
 
 ### Version
-**1.0.0**
+**1.0.dev2**
 
 [![Python Version](https://img.shields.io/pypi/pyversions/linuxacademy-dl.svg)](https://pypi.python.org/pypi/linuxacademy-dl)
 [![PyPI Version](https://img.shields.io/pypi/v/linuxacademy-dl.svg)](https://pypi.python.org/pypi/linuxacademy-dl)
 [![PyPI Status](https://img.shields.io/pypi/status/linuxacademy-dl.svg)](https://pypi.python.org/pypi/linuxacademy-dl)
 
-[![](https://images.microbadger.com/badges/image/arush/linuxacademy-dl.svg)](https://microbadger.com/images/arush/linuxacademy-dl "Docker Image Size")
-[![Docker Automated buil](https://img.shields.io/docker/automated/arush/linuxacademy-dl.svg)]()
-
 ### Prerequisites
 
 * Python (2 or 3)
 * `pip` (Python Install Packager)
-* `ffmpeg` (Cross-platform solution to record, convert and stream audio and video)
+* `ffmpeg` (Cross-platform solution to record, convert and stream audio and video - Optional)
 * If there are any missing packages, they will be automatically installed by `pip`
 
 ### Docker Image
-[Docker Image](https://hub.docker.com/r/arush/linuxacademy-dl/) for the tool is now available. Just [install docker](https://docs.docker.com/engine/installation/) use the following command:
+Docker Image for this tool is also available. Just [install the Docker](https://docs.docker.com/engine/installation/) in your machine and use the following command to pull the image:
 
 ```
 docker pull arush/linuxacademy-dl
 ```
 
-You will have to start the container with a shared volume using `docker run` and it will by default download course in the shared volume. Usage:
+Once you're done, you can run the container with a shared volume and it will place the downloaded course contents into the shared volume. 
 
 ```
 docker run -it -v <local-dir>:/media arush/linuxacademy-dl
@@ -61,12 +58,6 @@ sudo pip install linuxacademy-dl
 ```
 
 Also you need to use `sudo` installing `pip` itself or you run into the same problem.
-
-To install locally, clone and switch in the repository and run `setup.py` with `install` as an argument.
-
-```
-sudo python2.7 setup.py install
-```
 
 
 ### Update
@@ -140,7 +131,7 @@ optional arguments:
   -o OUTPUT, --output OUTPUT
                         Output directory
   --use-ffmpeg          Download videos from m3u8/hls with ffmpeg
-                        (Deprecated, is now default behaviour.)
+                        (Recommended)
   -q {1080,720,480,360}, --video-quality {1080,720,480,360}
                         Select video quality [default is 1080]
   --debug               Enable debug mode
