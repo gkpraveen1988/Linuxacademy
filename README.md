@@ -7,31 +7,49 @@ Python script to download a Linux Academy (linuxacademy.com) course, for persona
 [![PyPI Version](https://img.shields.io/pypi/v/linuxacademy-dl.svg)](https://pypi.python.org/pypi/linuxacademy-dl)
 [![PyPI Status](https://img.shields.io/pypi/status/linuxacademy-dl.svg)](https://pypi.python.org/pypi/linuxacademy-dl)
 
-
 ### Prerequisites
 
 * Python (2 or 3)
 * `pip` (Python Install Packager)
+* `ffmpeg` (Cross-platform solution to record, convert and stream audio and video - Optional)
 * If there are any missing packages, they will be automatically installed by `pip`
 
+### Docker Image
+Docker Image for this tool is also available. Just [install the Docker](https://docs.docker.com/engine/installation/) in your machine and use the following command to pull the image:
+
+```
+docker pull arush/linuxacademy-dl
+```
+
+Once you're done, you can run the container with a shared volume and it will place the downloaded course contents into the shared volume. 
+
+```
+docker run -it -v <local-dir>:/media arush/linuxacademy-dl
+```
 
 ### Preinstall
 
 If you don't have `pip` installed, look at their [install doc](http://pip.readthedocs.org/en/latest/installing.html).
 Easy install (if you trust them) is to run their bootstrap installer directly by using:
 
+```
     sudo curl https://bootstrap.pypa.io/get-pip.py | sudo python
+```
 
 
 ### Install
 
 `linuxacademy-dl` can be installed using `pip`
 
+```
     pip install linuxacademy-dl
+```
 
 or
 
+```
     python -m pip install linuxacademy-dl
+```
 
  In OS X and Linux you need to `sudo` installing `linuxacademy-dl` or you may face some errors
 
@@ -39,22 +57,25 @@ or
 sudo pip install linuxacademy-dl
 ```
 
-Also you need to `sudo` installing `pip` itself or you run into the same problem. 
+Also you need to use `sudo` installing `pip` itself or you run into the same problem.
 
 
 ### Update
 
 `linuxacademy-dl` can be updated using `pip`
 
+```
     pip install --upgrade linuxacademy-dl
+```
  
- 
-``or``
+or
 
+```
     python -m pip install --upgrade linuxacademy-dl
-    
+```
+
  In OS X and Linux you need to `sudo` upgrade `linuxacademy-dl`
- 
+
  ```
  sudo pip install --upgrade linuxacademy-dl
  ```
@@ -63,11 +84,15 @@ Also you need to `sudo` installing `pip` itself or you run into the same problem
 
 Simply call `linuxacademy-dl` with the full URL to the course page.
 
+```
     linuxacademy-dl https://linuxacademy.com/cp/modules/view/id/course_id
+```
 
-``or``
+or
 
+```
     python -m linuxacademy_dl https://linuxacademy.com/cp/modules/view/id/course_id
+```
 
 `linuxacademy-dl` will ask for your username (or email address) and password then start downloading the videos.
 
@@ -75,12 +100,15 @@ By default, `linuxacademy-dl` will download all the course materials directly in
 
 If you wish, you can include the username/email and password on the command line using the -u and -p parameters.
 
+```
     linuxacademy-dl -u user@domain.com -p $ecRe7w0rd https://linuxacademy.com/cp/modules/view/id/course_id
- 
+```
+
 For information about all available parameters, use the `--help` parameter
 
+```
     linuxacademy-dl --help
-
+```
 
 ### Advanced Usage
 
@@ -115,6 +143,8 @@ optional arguments:
 
 `linuxacademy-dl` can be uninstalled using `pip`
 
+```
     sudo pip uninstall linuxacademy-dl
+```
 
 You may uninstall the dependant packages too but be aware that those might be required for other Python modules.
