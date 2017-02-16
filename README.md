@@ -1,5 +1,6 @@
 Python script to download a Linux Academy (linuxacademy.com) course, for personal offline use.
 
+
 ### Version
 **1.0a1**
 
@@ -7,25 +8,14 @@ Python script to download a Linux Academy (linuxacademy.com) course, for persona
 [![PyPI Version](https://img.shields.io/pypi/v/linuxacademy-dl.svg)](https://pypi.python.org/pypi/linuxacademy-dl)
 [![PyPI Status](https://img.shields.io/pypi/status/linuxacademy-dl.svg)](https://pypi.python.org/pypi/linuxacademy-dl)
 
+
 ### Prerequisites
 
-* Python (2 or 3)
+* Python (2.7 or 3.5)
 * `pip` (Python Install Packager)
 * `ffmpeg` (Cross-platform solution to record, convert and stream audio and video - Optional)
 * If there are any missing packages, they will be automatically installed by `pip`
 
-### Docker Image
-Docker Image for this tool is also available. Just [install the Docker](https://docs.docker.com/engine/installation/) in your machine and use the following command to pull the image:
-
-```
-docker pull arush/linuxacademy-dl
-```
-
-Once you're done, you can run the container with a shared volume and it will place the downloaded course contents into the shared volume. 
-
-```
-docker run -it -v <local-dir>:/media arush/linuxacademy-dl
-```
 
 ### Preinstall
 
@@ -79,6 +69,21 @@ or
  ```
  sudo pip install --upgrade linuxacademy-dl
  ```
+
+
+### Docker Image
+Docker Image for this tool is also available. Just [install the Docker](https://docs.docker.com/engine/installation/) in your machine and use the following command to pull the image:
+
+```
+docker pull vassim/linuxacademy-dl
+```
+
+Once you've finished pulling the image, you can run the container using the following command. Replace `<download-dir>` with the folder location where you want to put your downloaded contents. 
+
+```
+docker run -it -v "<download-dir>":"/media" vassim/linuxacademy-dl
+```
+
 
 ### Usage
 
