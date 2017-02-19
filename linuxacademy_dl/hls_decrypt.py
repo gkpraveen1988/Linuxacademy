@@ -33,16 +33,51 @@
 # POSSIBILITY OF SUCH DAMAGE.
 #
 
-from __future__ import unicode_literals, absolute_import, print_function
+from __future__ import unicode_literals, absolute_import, \
+                    print_function, with_statement
+from Crypto.Cipher import AES
+from io import BytesIO
+from .exceptions import HLSDecryptException
 
 
-class LinuxAcademyException(Exception):
-    pass
+class HLSDecryptAES128(object):
+    def __init__(self, chunk_stream, key, iv):
+        self.chunk_stream = chunk_stream
+        self.key = key
+        self.iv = self.iv_from_int(
+            int(iv, 16) if type(iv) in (type(u''), type(b'')) else iv
+        )
 
+    @property
+    def chunk_stream(self):
+        return self.__chunk_stream
 
-class DLEngineException(Exception):
-    pass
+    @chunk_stream.setter
+    def chunk_stream(self, val):
+        if hasattr(val, 'read'):
+            self.__chunk_stream = val
+        else:
+            raise HLSDecryptException('chunk_stream must be a '
+                                      'file like object')
 
+    def iv_from_int(self, int_iv):
+        return b''.join(chr((int_iv >> (i * 8)) & 0xFF)
+                        for i in range(AES.block_size)[::-1])
 
-class HLSDecryptException(Exception):
-    pass
+    def decrypt(self):
+        decrypted_chunk = BytesIO()
+        cipher = AES.new(self.key, AES.MODE_CBC, self.iv)
+
+        next_chunk = ''
+        finished = False
+
+        while not finished:
+            chunk, next_chunk = next_chunk, \
+                cipher.decrypt(self.chunk_stream.read(1024 * AES.block_size))
+            if len(next_chunk) == 0:
+                padding_length = ord(chunk[-1])
+                chunk = chunk[:-padding_length]
+                finished = True
+            decrypted_chunk.write(bytes(chunk))
+        decrypted_chunk.seek(0)
+        return decrypted_chunk

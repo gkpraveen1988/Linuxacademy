@@ -38,6 +38,7 @@ from . import __title__
 from ._session import session
 from concurrent.futures import ThreadPoolExecutor
 from requests_futures.sessions import FuturesSession
+from .hls_decrypt import HLSDecryptAES128
 
 import os
 import subprocess
@@ -81,19 +82,48 @@ class DownloadEngine(object):
         finally:
             ts_accumulator.close()
 
-    def __call__(self, ts_chunk_urls, save_to, file_name):
+    def hls_download(self, hls_data, save_as):
+        try:
+            contents = [self.session.get(url, stream=True)
+                        for url in hls_data['data']]
+
+            ts_accumulator = tempfile.NamedTemporaryFile() \
+                if self.use_ffmpeg \
+                else open(save_as, "wb")
+
+            for idx, content in enumerate(contents, 0):
+                itm = content.result()
+                if hls_data['encryption'] is None:
+                    ts_accumulator.write(itm.raw.read())
+                else:
+                    iv = idx if hls_data['iv'] is None else hls_data['iv']
+                    with HLSDecryptAES128(
+                                itm.raw, hls_data['key'], iv
+                            ).decrypt() as dec_itm:
+                        ts_accumulator.write(dec_itm.read())
+
+            if self.use_ffmpeg:
+                self.ffmpeg_process(ts_accumulator.name, save_as)
+
+        except OSError as exc:
+            logger.critical('Failed to download: %s', exc)
+
+        finally:
+            ts_accumulator.close()
+
+    def __call__(self, download_info, save_to):
         try:
             os.makedirs(save_to)
         except:
             pass
 
-        final_path = os.path.join(save_to, file_name)
+        final_path = os.path.join(save_to, download_info['save_resource_as'])
 
         if self.skip_existing and os.path.exists(final_path):
             logger.info("Skipping already existing file {}".format(final_path))
         else:
             logger.info("Downloading {}".format(final_path))
-            self.ts_download(ts_chunk_urls, final_path)
+            self.hls_download(download_info, final_path)
             logger.info("Downloaded {}".format(final_path))
 
     def ffmpeg_process(self, input_file_name, output_file_name):

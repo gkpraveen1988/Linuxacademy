@@ -89,9 +89,13 @@ class LessonProcessor(object):
         return [{
             'data': map(
                 lambda x: "{}/{}".format(play_list_url_base, x),
-                parser.parsed_data
+                parser.parsed_data['chunks']
             ),
-            'save_resource_as': "{}.{}".format(self.title, "mp4")
+            'save_resource_as': "{}.{}".format(self.title, "mp4"),
+            'encryption': parser.parsed_data['encryption'],
+            'key': session.get(parser.parsed_data['uri']).content,
+            'iv': parser.parsed_data['iv'],
+            'd_type': 'hls_data'
         }]
 
     def __call__(self):
@@ -131,7 +135,6 @@ class Asset(object):
 
         for resource in self._resources:
             self._download_engine(
-                    resource['data'],
-                    self.save_to,
-                    resource['save_resource_as']
+                    resource,
+                    self.save_to
             )
