@@ -45,6 +45,7 @@ import sys
 import getpass
 import argparse
 import logging
+import locale
 
 logger = logging.getLogger(__title__)
 
@@ -160,11 +161,22 @@ class CLI(object):
                     pass
                 logger.addHandler(self.get_file_log_handler(error_level))
 
-    def _generate_sys_info_log(self):
-        system_info = sys_info()
-        logger.debug('Python: {}'.format(system_info['python']))
-        logger.debug('Platform: {}'.format(system_info['platform']))
-        logger.debug('OS: {}'.format(system_info['os']))
+    def _generate_sys_info_log(self, sys_info):
+        logger.debug('Python: {}'.format(sys_info['python']))
+        logger.debug('Platform: {}'.format(sys_info['platform']))
+        logger.debug('OS: {}'.format(sys_info['os']))
+
+    def _set_locale(self, sys_info):
+        try:
+            if sys_info['os'].startswith("Linux") or \
+                    sys_info['os'].startswith("OS X"):
+                locale.setlocale(locale.LC_ALL, "en_US.UTF-8")
+            elif sys_info['os'].startswith("Windows"):
+                locale.setlocale(locale.LC_ALL, "English_United States")
+        except:
+            locale.setlocale(locale.LC_ALL, '')
+            logger.warning('Failed to set up locale information. '
+                           'System default locale settings will be used')
 
     def main(self):
         args = vars(self.argparser.parse_args())
@@ -177,6 +189,9 @@ class CLI(object):
             os.path.expanduser(args['output']) if args['output'] else ''
         )
 
+        sys_information = sys_info()
+        self._set_locale(sys_information)
+
         if not username:
             username = input("Username / Email : ")
 
@@ -185,7 +200,7 @@ class CLI(object):
 
         if debug:
             self.init_logger(error_level=logging.DEBUG)
-            self._generate_sys_info_log()
+            self._generate_sys_info_log(sys_information)
         else:
             self.init_logger()
 
