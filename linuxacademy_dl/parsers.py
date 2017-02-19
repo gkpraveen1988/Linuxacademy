@@ -128,8 +128,19 @@ class HLSParser(object):
     def handle_x_stream_inf(self, stream, metadata):
         pass
 
+    def handle_x_key(self, attributes):
+        pass
+
     def handle_extinf(self, stream):
         pass
+
+    def extract_attribute_list(self, line):
+        tag, attrs_raw = line.split(":", 1)
+        attrs = {
+            k: v for k, v in
+            map(lambda x: x.split("="), attrs_raw.split(","))
+        }
+        return (tag, attrs)
 
     def __goahead(self):
         if len(self.__raw_data) > 0:
@@ -144,10 +155,7 @@ class HLSParser(object):
                     detected_x_stream_inf = False
 
                 elif line.startswith("#EXT-X-STREAM-INF:"):
-                    metadata = {
-                        k: v for k, v in
-                        map(lambda x: x.split("="), line[18:].split(","))
-                    }
+                    metadata = self.extract_attribute_list(line)[1]
                     detected_x_stream_inf = True
 
                 if detected_extinf:
@@ -156,6 +164,9 @@ class HLSParser(object):
 
                 elif line.startswith("#EXTINF:"):
                     detected_extinf = True
+
+                if line.startswith("#EXT-X-KEY:"):
+                    self.handle_x_key(self.extract_attribute_list(line)[1])
 
 
 class PlaylistParser(HLSParser):
@@ -171,8 +182,20 @@ class PlaylistParser(HLSParser):
 class ChunkListParser(HLSParser):
 
     def __init__(self):
-        self.parsed_data = []
+        self.parsed_data = {
+            "encryption": None,
+            "uri": None,
+            "iv": None,
+            "chunks": []
+        }
         super(ChunkListParser, self).__init__()
 
     def handle_extinf(self, stream):
-        self.parsed_data.append(stream)
+        self.parsed_data['chunks'].append(stream)
+
+    def handle_x_key(self, attributes):
+        self.parsed_data["encryption"] = attributes.get('METHOD', None)
+        uri = attributes.get('URI', None)
+        if uri.startswith('"'):
+            self.parsed_data["uri"] = uri[1:-1] if uri.startswith('"') else uri
+        self.parsed_data["iv"] = attributes.get('IV', None)
