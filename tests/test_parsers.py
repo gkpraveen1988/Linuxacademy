@@ -60,6 +60,11 @@ DATA_PATH = os.path.join(os.path.dirname(__file__), 'data')
      os.path.join(DATA_PATH, 'chunklist_b2000000_m3u8_parsed'),
      ChunkListParser()
     ),
+    (
+     os.path.join(DATA_PATH, 'chunklist_b800000_m3u8_response'),
+     os.path.join(DATA_PATH, 'chunklist_b800000_m3u8_parsed'),
+     ChunkListParser()
+    ),
 ])
 def test_parser(ip_file_path, op_file_path, parser_obj):
     with open(ip_file_path, 'rb') as in_data_raw, \
