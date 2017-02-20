@@ -11,7 +11,7 @@ Python script to download a Linux Academy (linuxacademy.com) course, for persona
 
 ### Prerequisites
 
-* Python (2.7 or 3.5)
+* Python (>=2.7.9 or >=3.5)
 * `pip` (Python Install Packager)
 * `ffmpeg` (Cross-platform solution to record, convert and stream audio and video - Optional)
 * If there are any missing packages, they will be automatically installed by `pip`
