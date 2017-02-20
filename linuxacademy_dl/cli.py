@@ -170,11 +170,11 @@ class CLI(object):
         try:
             if sys_info['os'].startswith("Linux") or \
                     sys_info['os'].startswith("OS X"):
-                locale.setlocale(locale.LC_ALL, "en_US.UTF-8")
+                locale.setlocale(locale.LC_ALL, b"en_US.UTF-8")
             elif sys_info['os'].startswith("Windows"):
-                locale.setlocale(locale.LC_ALL, "English_United States")
+                locale.setlocale(locale.LC_ALL, b"English_United States")
         except:
-            locale.setlocale(locale.LC_ALL, '')
+            locale.setlocale(locale.LC_ALL, b'')
             logger.warning('Failed to set up locale information. '
                            'System default locale settings will be used')
 
