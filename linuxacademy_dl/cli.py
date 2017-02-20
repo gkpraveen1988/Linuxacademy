@@ -122,6 +122,12 @@ class CLI(object):
             datetime.isoformat(datetime.now())
         )
 
+    def get_debug_log_file_path(self):
+        return os.path.join(
+            self.LOG_DIR,
+            self.get_debug_log_file_name()
+        )
+
     def get_log_handler(self, error_level, formatter,
                         handler, handler_args={}):
         log_handler = handler(**handler_args)
@@ -137,15 +143,12 @@ class CLI(object):
             logging.StreamHandler
         )
 
-    def get_file_log_handler(self, error_level):
+    def get_file_log_handler(self, error_level, log_path):
         return self.get_log_handler(
             error_level, self.LOG_FORMAT_FILE,
             logging.FileHandler,
             {
-             "filename": os.path.join(
-                self.LOG_DIR,
-                self.get_debug_log_file_name()
-                ),
+             "filename": log_path,
              "mode": "w+"
             }
         )
@@ -159,7 +162,11 @@ class CLI(object):
                     os.makedirs(self.LOG_DIR)
                 except:
                     pass
-                logger.addHandler(self.get_file_log_handler(error_level))
+                log_path = self.get_debug_log_file_path()
+                logger.addHandler(
+                    self.get_file_log_handler(error_level, log_path)
+                )
+                logger.info('Debug log file created at {}'.format(log_path))
 
     def _generate_sys_info_log(self, sys_info):
         logger.debug('Python: {}'.format(sys_info['python']))
