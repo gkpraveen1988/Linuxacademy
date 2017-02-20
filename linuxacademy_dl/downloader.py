@@ -61,27 +61,6 @@ class DownloadEngine(object):
             session=session
         )
 
-    def ts_download(self, ts_chunk_urls, save_as):
-        try:
-            contents = [self.session.get(url) for url in ts_chunk_urls]
-
-            ts_accumulator = tempfile.NamedTemporaryFile() \
-                if self.use_ffmpeg \
-                else open(save_as, "wb")
-
-            for content in contents:
-                itm = content.result()
-                ts_accumulator.write(itm.content)
-
-            if self.use_ffmpeg:
-                self.ffmpeg_process(ts_accumulator.name, save_as)
-
-        except OSError as exc:
-            logger.critical('Failed to download: %s', exc)
-
-        finally:
-            ts_accumulator.close()
-
     def hls_download(self, hls_data, save_as):
         try:
             contents = [self.session.get(url, stream=True)
