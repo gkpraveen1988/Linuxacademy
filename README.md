@@ -2,7 +2,7 @@ Python script to download a Linux Academy (linuxacademy.com) course, for persona
 
 
 ### Version
-**1.0a1**
+**1.0a2**
 
 [![Python Version](https://img.shields.io/pypi/pyversions/linuxacademy-dl.svg)](https://pypi.python.org/pypi/linuxacademy-dl)
 [![PyPI Version](https://img.shields.io/pypi/v/linuxacademy-dl.svg)](https://pypi.python.org/pypi/linuxacademy-dl)
