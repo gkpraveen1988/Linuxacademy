@@ -117,5 +117,5 @@ class DownloadEngine(object):
             '-crf', '50',
             '-f', 'mp4', output_file_name
         ]
-        logger.debug("Executin FFMPEG Command {}".format(' '.join(command)))
+        logger.debug('Executing FFMPEG Command "{}"'.format(' '.join(command)))
         subprocess.call(command)
