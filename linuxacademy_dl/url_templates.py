@@ -35,6 +35,7 @@
 
 from __future__ import unicode_literals, absolute_import, print_function
 from string import Template
+from .py_23 import text_type
 
 try:
     from urllib.parse import urljoin
@@ -101,7 +102,7 @@ def render_url(session, url_template,
         for k, v in source.items():
             if isinstance(v, dict):
                 render(v)
-            elif isinstance(v, unicode):
+            elif isinstance(v, text_type):
                 source[k] = Template(v).safe_substitute(template_params)
             elif v is None:
                 source[k] = payload.get(k, None)

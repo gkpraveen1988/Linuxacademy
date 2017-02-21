@@ -36,11 +36,15 @@
 from __future__ import unicode_literals, absolute_import, \
                     print_function, with_statement
 from Crypto.Cipher import AES
-from io import BytesIO
+from tempfile import SpooledTemporaryFile
+from .py_23 import PY2
 from .exceptions import HLSDecryptException
 
 
 class HLSDecryptAES128(object):
+
+    POOL_SIZE = 1024 * 1024 * 5  # 5MB
+
     def __init__(self, chunk_stream, key, iv):
         self.chunk_stream = chunk_stream
         self.key = key
@@ -61,11 +65,14 @@ class HLSDecryptAES128(object):
                                       'file like object')
 
     def iv_from_int(self, int_iv):
-        return b''.join(chr((int_iv >> (i * 8)) & 0xFF)
-                        for i in range(AES.block_size)[::-1])
+        return ''.join(chr((int_iv >> (i * 8)) & 0xFF)
+                       for i in range(AES.block_size)[::-1])
 
     def decrypt(self):
-        decrypted_chunk = BytesIO()
+        decrypted_chunk = SpooledTemporaryFile(
+            max_size=self.POOL_SIZE,
+            mode='wb+'
+        )
         cipher = AES.new(self.key, AES.MODE_CBC, self.iv)
 
         next_chunk = ''
@@ -75,9 +82,15 @@ class HLSDecryptAES128(object):
             chunk, next_chunk = next_chunk, \
                 cipher.decrypt(self.chunk_stream.read(1024 * AES.block_size))
             if len(next_chunk) == 0:
-                padding_length = ord(chunk[-1])
+                # in PY2 chunk[-1] == str
+                if PY2:
+                    padding_length = ord(chunk[-1])
+                else:
+                    padding_length = chunk[-1]
+
                 chunk = chunk[:-padding_length]
                 finished = True
-            decrypted_chunk.write(bytes(chunk))
+            if chunk:
+                decrypted_chunk.write(chunk)
         decrypted_chunk.seek(0)
         return decrypted_chunk

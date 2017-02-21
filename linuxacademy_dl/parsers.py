@@ -36,6 +36,7 @@
 from __future__ import unicode_literals, absolute_import, print_function
 from io import StringIO
 from .utils import clean_filename, clean_html
+from .py_23 import text_type
 
 try:
     from HTMLParser import HTMLParser
@@ -108,6 +109,7 @@ class SyllabusParser(HTMLParser, object):
             self.__reset_text_store()
 
     def handle_data(self, data):
+        data = text_type(data)
         if self.__flag_write_to_buffer:
             self.__text_store.write(data)
 
