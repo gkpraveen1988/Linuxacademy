@@ -40,15 +40,11 @@ from .parsers import PlaylistParser, ChunkListParser
 from .utils import clean_html
 from ._session import session
 from .url_templates import BASE_URL
-
+from six.moves.urllib.parse import urljoin
 import re
 import os
 import logging
 
-try:
-    from urllib.parse import urljoin
-except:
-    from urlparse import urljoin
 
 logger = logging.getLogger(__title__)
 REGEX_M3U8 = "var wowzaUrl2 = " \
