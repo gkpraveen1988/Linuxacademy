@@ -38,6 +38,7 @@ from . import __title__
 from .parsers import SyllabusParser
 from .url_templates import render_url
 from ._session import session
+from .exceptions import LinuxAcademyException
 from .assets import Asset
 
 from .url_templates import COURSE_LIST, COURSE_SYLLABUS
@@ -77,6 +78,8 @@ class Course(object):
 
     def assets(self):
         syllabus = self._parse_syllabus()
+        if not syllabus:
+            raise LinuxAcademyException('Course not found!')
         self._assets = []
         for chapter_title, chapter_contents in syllabus.items():
             chapter_folder = "{} - {}".format(
