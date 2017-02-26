@@ -205,7 +205,7 @@ class CLI(object):
                 la.analyze()
                 la.download()
         except LinuxAcademyException as lae:
-            logger.error(lae.message)
+            logger.error(lae.args[0])
 
         except KeyboardInterrupt:
             logger.error("User interrupted the process, exiting...")
