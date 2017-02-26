@@ -39,7 +39,7 @@ from ._session import session
 from concurrent.futures import ThreadPoolExecutor
 from requests_futures.sessions import FuturesSession
 from .hls_decrypt import HLSDecryptAES128
-
+import sys
 import os
 import subprocess
 import multiprocessing
@@ -90,13 +90,27 @@ class DownloadEngine(object):
         finally:
             ts_accumulator.close()
 
-    def __call__(self, download_info, save_to):
-        try:
-            os.makedirs(save_to)
-        except:
-            pass
+    def safe_process_download_path(self, save_path, file_name, make_dirs=True):
+        sys_encoding = sys.getdefaultencoding()
 
-        final_path = os.path.join(save_to, download_info['save_resource_as'])
+        d, f = map(
+            lambda x: x.encode(sys_encoding, 'ignore').decode('utf-8'),
+            (save_path, file_name)
+        ) if sys_encoding != 'utf-8' else (save_path, file_name)
+
+        if make_dirs:
+            try:
+                os.makedirs(d)
+            except:
+                pass
+
+        return os.path.join(d, f)
+
+    def __call__(self, download_info, save_to):
+
+        final_path = self.safe_process_download_path(
+            save_to, download_info['save_resource_as']
+        )
 
         if self.skip_existing and os.path.exists(final_path):
             logger.info("Skipping already existing file {}".format(final_path))
