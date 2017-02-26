@@ -37,7 +37,7 @@ from __future__ import unicode_literals, absolute_import, \
                     print_function, with_statement
 from Crypto.Cipher import AES
 from tempfile import SpooledTemporaryFile
-from .py_23 import PY2
+from six import PY2, string_types
 from .exceptions import HLSDecryptException
 
 
@@ -49,7 +49,7 @@ class HLSDecryptAES128(object):
         self.chunk_stream = chunk_stream
         self.key = key
         self.iv = self.iv_from_int(
-            int(iv, 16) if type(iv) in (type(u''), type(b'')) else iv
+            int(iv, 16) if isinstance(iv, string_types) else iv
         )
 
     @property
@@ -82,7 +82,7 @@ class HLSDecryptAES128(object):
             chunk, next_chunk = next_chunk, \
                 cipher.decrypt(self.chunk_stream.read(1024 * AES.block_size))
             if len(next_chunk) == 0:
-                # in PY2 chunk[-1] == str
+                # in PY2 type(chunk[-1]) == <str>
                 if PY2:
                     padding_length = ord(chunk[-1])
                 else:

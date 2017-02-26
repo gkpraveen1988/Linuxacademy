@@ -35,12 +35,8 @@
 
 from __future__ import unicode_literals, absolute_import, print_function
 from string import Template
-from .py_23 import text_type
-
-try:
-    from urllib.parse import urljoin
-except:
-    from urlparse import urljoin
+from six import text_type
+from six.moves.urllib.parse import urljoin
 
 
 BASE_URL = 'https://linuxacademy.com'
