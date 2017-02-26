@@ -39,13 +39,12 @@ from .linux_academy import LinuxAcademy
 from .exceptions import LinuxAcademyException
 from .utils import sys_info
 from datetime import datetime
-
+from six.moves import input
 import os
 import sys
 import getpass
 import argparse
 import logging
-import locale
 
 logger = logging.getLogger(__title__)
 
@@ -173,18 +172,6 @@ class CLI(object):
         logger.debug('Platform: {}'.format(sys_info['platform']))
         logger.debug('OS: {}'.format(sys_info['os']))
 
-    def _set_locale(self, sys_info):
-        try:
-            if sys_info['os'].startswith("Linux") or \
-                    sys_info['os'].startswith("OS X"):
-                locale.setlocale(locale.LC_ALL, "en_US.UTF-8")
-            elif sys_info['os'].startswith("Windows"):
-                locale.setlocale(locale.LC_ALL, "English_United States")
-        except:
-            locale.setlocale(locale.LC_ALL, '')
-            logger.warning('Failed to set up locale information. '
-                           'System default locale settings will be used')
-
     def main(self):
         args = vars(self.argparser.parse_args())
 
@@ -197,13 +184,12 @@ class CLI(object):
         )
 
         sys_information = sys_info()
-        self._set_locale(sys_information)
 
         if not username:
             username = input("Username / Email : ")
 
         if not password:
-            password = getpass.getpass(prompt='Password : ')
+            password = getpass.getpass()
 
         if debug:
             self.init_logger(error_level=logging.DEBUG)
