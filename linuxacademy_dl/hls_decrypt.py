@@ -37,7 +37,7 @@ from __future__ import unicode_literals, absolute_import, \
                     print_function, with_statement
 from Crypto.Cipher import AES
 from tempfile import SpooledTemporaryFile
-from six import PY2, string_types
+from six import PY2, string_types, int2byte
 from .exceptions import HLSDecryptException
 
 
@@ -65,8 +65,8 @@ class HLSDecryptAES128(object):
                                       'file like object')
 
     def iv_from_int(self, int_iv):
-        return ''.join(chr((int_iv >> (i * 8)) & 0xFF)
-                       for i in range(AES.block_size)[::-1])
+        return b''.join([int2byte((int_iv >> (i * 8)) & 0xFF)
+                         for i in range(AES.block_size)[::-1]])
 
     def decrypt(self):
         decrypted_chunk = SpooledTemporaryFile(
