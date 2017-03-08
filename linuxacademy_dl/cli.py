@@ -212,5 +212,12 @@ class CLI(object):
         except Exception as e:
             logger.error('Unknown Exception')
             logger.exception(e)
+            logger.info(
+                'Please report this issue on '
+                'https://github.com/vassim/linuxacademy-dl/issues. '
+                'Make sure you are using the latest version. '
+                'Be sure to call linuxacademy-dl with the --debug flag and '
+                'include its complete output.'
+            )
         finally:
             sys.exit(1)
