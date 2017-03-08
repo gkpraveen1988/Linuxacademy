@@ -1,12 +1,18 @@
-Python script to download a Linux Academy (linuxacademy.com) course, for personal offline use.
+# linuxacademy-dl
+
+A utility to download Linux Academy (linuxacademy.com) courses, for personal offline use.
+
+> [![Python Version](https://img.shields.io/pypi/pyversions/linuxacademy-dl.svg)](https://pypi.python.org/pypi/linuxacademy-dl)
+[![PyPI Version](https://img.shields.io/pypi/v/linuxacademy-dl.svg)](https://pypi.python.org/pypi/linuxacademy-dl)
+[![PyPI Status](https://img.shields.io/pypi/status/linuxacademy-dl.svg)](https://pypi.python.org/pypi/linuxacademy-dl)
+[![Build Status](https://travis-ci.org/vassim/linuxacademy-dl.svg?branch=master)](https://travis-ci.org/vassim/linuxacademy-dl)
+
+> [![Docker Image](https://img.shields.io/docker/automated/vassim/linuxacademy-dl.svg)](https://hub.docker.com/r/vassim/linuxacademy-dl/)
+[![Docker Metadata](https://images.microbadger.com/badges/image/arush/linuxacademy-dl.svg)](https://microbadger.com/images/arush/linuxacademy-dl)
 
 
 ### Version
 **1.0a3**
-
-[![Python Version](https://img.shields.io/pypi/pyversions/linuxacademy-dl.svg)](https://pypi.python.org/pypi/linuxacademy-dl)
-[![PyPI Version](https://img.shields.io/pypi/v/linuxacademy-dl.svg)](https://pypi.python.org/pypi/linuxacademy-dl)
-[![PyPI Status](https://img.shields.io/pypi/status/linuxacademy-dl.svg)](https://pypi.python.org/pypi/linuxacademy-dl)
 
 
 ### Prerequisites
@@ -57,7 +63,7 @@ Also you need to use `sudo` installing `pip` itself or you run into the same pro
 ```
     pip install --upgrade linuxacademy-dl
 ```
- 
+
 or
 
 ```
@@ -78,7 +84,7 @@ Docker Image for this tool is also available. Just [install the Docker](https://
 docker pull vassim/linuxacademy-dl
 ```
 
-Once you've finished pulling the image, you can run the container using the following command. Replace `<download-dir>` with the folder location where you want to put your downloaded contents. 
+Once you've finished pulling the image, you can run the container using the following command. Replace `<download-dir>` with the folder location where you want to put your downloaded contents.
 
 ```
 docker run -it -v "<download-dir>":"/media" vassim/linuxacademy-dl
@@ -114,6 +120,7 @@ For information about all available parameters, use the `--help` parameter
 ```
     linuxacademy-dl --help
 ```
+
 
 ### Advanced Usage
 
