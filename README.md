@@ -8,7 +8,7 @@ A utility to download Linux Academy (linuxacademy.com) courses, for personal off
 [![Build Status](https://travis-ci.org/vassim/linuxacademy-dl.svg?branch=master)](https://travis-ci.org/vassim/linuxacademy-dl)
 
 > [![Docker Image](https://img.shields.io/docker/automated/vassim/linuxacademy-dl.svg)](https://hub.docker.com/r/vassim/linuxacademy-dl/)
-[![Docker Metadata](https://images.microbadger.com/badges/image/arush/linuxacademy-dl.svg)](https://microbadger.com/images/arush/linuxacademy-dl)
+[![Docker Metadata](https://images.microbadger.com/badges/image/vassim/linuxacademy-dl.svg)](https://microbadger.com/images/vassim/linuxacademy-dl)
 
 
 ### Version
