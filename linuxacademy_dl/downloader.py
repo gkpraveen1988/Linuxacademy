@@ -72,12 +72,13 @@ class DownloadEngine(object):
 
             for idx, content in enumerate(contents, 0):
                 itm = content.result()
-                if hls_data['encryption'] is None:
+                if hls_data.get('encryption'):
                     ts_accumulator.write(itm.raw.read())
                 else:
-                    iv = idx if hls_data['iv'] is None else hls_data['iv']
+                    iv = hls_data.get('iv', idx)
+                    key = session.get(hls_data.get('key_uri')).content
                     with HLSDecryptAES128(
-                                itm.raw, hls_data['key'], iv
+                                itm.raw, key, iv
                             ).decrypt() as dec_itm:
                         ts_accumulator.write(dec_itm.read())
 

@@ -82,17 +82,27 @@ class LessonProcessor(object):
         parser = ChunkListParser()
         parser.feed(session.get(play_list_url).text)
 
-        return [{
+        result = {
             'data': map(
                 lambda x: "{}/{}".format(play_list_url_base, x),
                 parser.parsed_data['chunks']
             ),
             'save_resource_as': "{}.{}".format(self.title, "mp4"),
-            'encryption': parser.parsed_data['encryption'],
-            'key': session.get(parser.parsed_data['uri']).content,
-            'iv': parser.parsed_data['iv'],
             'd_type': 'hls_data'
-        }]
+        }
+
+        if parser.parsed_data['encryption']:
+            result.update({
+                'encryption': parser.parsed_data['encryption'],
+                'key_uri': parser.parsed_data['uri']
+            })
+
+            iv = parser.parsed_data['iv']
+
+            if iv:
+                result.update({'iv': iv})
+
+        return [result]
 
     def __call__(self):
         return self.process()
