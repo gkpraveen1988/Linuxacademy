@@ -12,7 +12,7 @@ A utility to download Linux Academy (linuxacademy.com) courses, for personal off
 
 
 ### Version
-**1.0a3**
+**1.0a4**
 
 
 ### Prerequisites
