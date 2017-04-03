@@ -39,6 +39,8 @@ from ._session import session
 from concurrent.futures import ThreadPoolExecutor
 from requests_futures.sessions import FuturesSession
 from .hls_decrypt import HLSDecryptAES128
+from six import BytesIO
+from contextlib import closing
 import sys
 import os
 import subprocess
@@ -63,24 +65,37 @@ class DownloadEngine(object):
 
     def hls_download(self, hls_data, save_as):
         try:
-            contents = [self.session.get(url, stream=True)
-                        for url in hls_data['data']]
+            contents = [
+                self.session.get(
+                    url, background_callback=lambda s, r: r.close()
+                )
+                for url in hls_data['data']
+            ]
 
             ts_accumulator = tempfile.NamedTemporaryFile() \
                 if self.use_ffmpeg \
                 else open(save_as, "wb")
 
             for idx, content in enumerate(contents, 0):
-                itm = content.result()
+                chunk_resp = content.result()
+                chunk = chunk_resp.content
+
+                logger.debug(
+                    'Fetched chunk_resp #{} ({}/{})'.format(
+                        idx, chunk_resp.headers['Content-Length'], len(chunk)
+                    )
+                )
+
                 if hls_data.get('encryption'):
-                    ts_accumulator.write(itm.raw.read())
-                else:
                     iv = hls_data.get('iv', idx)
                     key = session.get(hls_data.get('key_uri')).content
-                    with HLSDecryptAES128(
-                                itm.raw, key, iv
-                            ).decrypt() as dec_itm:
-                        ts_accumulator.write(dec_itm.read())
+                    with closing(BytesIO(chunk)) as fp:
+                        with HLSDecryptAES128(
+                                    fp, key, iv
+                                ).decrypt() as dec_itm:
+                            ts_accumulator.write(dec_itm.read())
+                else:
+                    ts_accumulator.write(chunk)
 
             if self.use_ffmpeg:
                 self.ffmpeg_process(ts_accumulator.name, save_as)

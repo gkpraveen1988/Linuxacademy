@@ -59,14 +59,29 @@ class HLSDecryptAES128(object):
     @chunk_stream.setter
     def chunk_stream(self, val):
         if hasattr(val, 'read'):
+            try:
+                val.seek(0)
+            except:
+                pass
             self.__chunk_stream = val
         else:
-            raise HLSDecryptException('chunk_stream must be a '
-                                      'file like object')
+            raise HLSDecryptException(
+                'chunk_stream must be a '
+                'file like object or an HTTP response'
+            )
 
     def iv_from_int(self, int_iv):
         return b''.join([int2byte((int_iv >> (i * 8)) & 0xFF)
                          for i in range(AES.block_size)[::-1]])
+
+    def pkcs7_reverse_padded_chunk(self, chunk):
+        # in PY2 type(chunk[-1]) == <str>
+        if PY2:
+            padding_length = ord(chunk[-1])
+        else:
+            padding_length = chunk[-1]
+
+        return chunk[:-padding_length]
 
     def decrypt(self):
         decrypted_chunk = SpooledTemporaryFile(
@@ -80,17 +95,15 @@ class HLSDecryptAES128(object):
 
         while not finished:
             chunk, next_chunk = next_chunk, \
-                cipher.decrypt(self.chunk_stream.read(1024 * AES.block_size))
-            if len(next_chunk) == 0:
-                # in PY2 type(chunk[-1]) == <str>
-                if PY2:
-                    padding_length = ord(chunk[-1])
-                else:
-                    padding_length = chunk[-1]
+                self.chunk_stream.read(1024 * AES.block_size)
 
-                chunk = chunk[:-padding_length]
+            chunk = cipher.decrypt(chunk)
+
+            if len(next_chunk) == 0:
+                chunk = self.pkcs7_reverse_padded_chunk(chunk)
                 finished = True
             if chunk:
                 decrypted_chunk.write(chunk)
+
         decrypted_chunk.seek(0)
         return decrypted_chunk
