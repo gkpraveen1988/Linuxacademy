@@ -118,7 +118,7 @@ class CLI(object):
 
     def get_debug_log_file_name(self):
         return "log_{}.log".format(
-            datetime.isoformat(datetime.now())
+            datetime.now().strftime('%Y-%m-%d_%H-%M-%S')
         )
 
     def get_debug_log_file_path(self):
